@@ -7,7 +7,7 @@
 class QLabel;
 class QSlider;
 class QToolButton;
-class QQuickWidget;
+#include <QQuickWidget>
 class QQmlEngine;
 
 class View : public QFrame
@@ -27,6 +27,8 @@ private slots:
     void togglePointerMode();
     void rotateLeft();
     void rotateRight();
+    void  quickWidgetStatusChanged(QQuickWidget::Status status);
+
 
 private:
     QQuickWidget *m_quickWidget;

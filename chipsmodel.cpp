@@ -86,13 +86,13 @@ void ChipsModel::generateData()
     // Populate scene
     int xx = 0;
     int nitems = 0;
-    for (int i = -11000; i < 11000; i += 110) {
+    for (int i = 0; i < 22000; i += 105) {
         ++xx;
         int yy = 0;
-        for (int j = -7000; j < 7000; j += 70) {
+        for (int j = 0; j < 14000; j += 65) {
             ++yy;
-            qreal x = (i + 11000) / 22000.0;
-            qreal y = (j + 7000) / 14000.0;
+            qreal x = (i ) / 22000.0;
+            qreal y = (j ) / 14000.0;
 
             QColor color(image.pixel(int(image.width() * x), int(image.height() * y)));
 

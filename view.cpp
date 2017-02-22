@@ -6,7 +6,8 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QStyle>
-
+#include <QQmlError>
+#include <QQuickItem>
 View::View(const QString &name, QQmlEngine *engine, QWidget *parent)
     : QFrame(parent)
 {
@@ -109,6 +110,8 @@ View::View(const QString &name, QQmlEngine *engine, QWidget *parent)
     connect(rotateRightIcon, SIGNAL(clicked()), this, SLOT(rotateRight()));
     connect(zoomInIcon, SIGNAL(clicked()), this, SLOT(zoomIn()));
     connect(zoomOutIcon, SIGNAL(clicked()), this, SLOT(zoomOut()));
+    connect(m_quickWidget, &QQuickWidget::statusChanged,
+            this, &View::quickWidgetStatusChanged);
 
     setupMatrix();
 
@@ -118,11 +121,22 @@ View::View(const QString &name, QQmlEngine *engine, QWidget *parent)
 void View::zoomIn(int level)
 {
 
-}
+   auto qi =m_quickWidget->rootObject()->findChild<QQuickItem*>();
+   qi->setScale(qi->scale()*1.05);
 
+
+}
+void  View::quickWidgetStatusChanged(QQuickWidget::Status status)
+{
+    if (status == QQuickWidget::Error) {
+        for(auto e: m_quickWidget->errors())
+            qWarning() <<  e;
+    }
+}
 void View::zoomOut(int level)
 {
-
+    auto qi =m_quickWidget->rootObject()->findChild<QQuickItem*>();
+    qi->setScale(qi->scale()/1.05);
 }
 
 void View::resetView()
@@ -147,10 +161,14 @@ void View::togglePointerMode()
 
 void View::rotateLeft()
 {
+    auto qi =m_quickWidget->rootObject()->findChild<QQuickItem*>();
+    qi->setRotation((int)(qi->rotation()-5) % 360);
 
 }
 
 void View::rotateRight()
 {
+    auto qi =m_quickWidget->rootObject()->findChild<QQuickItem*>();
+    qi->setRotation((int)(qi->rotation()+5) % 360);
 
 }
